@@ -1,9 +1,10 @@
 
 
 class Calculator{
-    constructor(previousOperandText,currentOperandText) {
+    constructor(previousOperandText,currentOperandText,subject) {
         this.previousOperandText = previousOperandText
         this.currentOperandText = currentOperandText
+        this.subject = subject
         this.clear()
         
     }
@@ -22,8 +23,20 @@ class Calculator{
     appendNumber(number){
         if( number === "." && this.currentOperand.includes('.')) return
         this.currentOperand = this.currentOperand + number
-        this.currentOperandText.innerText = this.currentOperand.toLocaleString()
-       
+        this.currentOperandText.innerText = this.currentOperand.toLocaleString()   
+        
+    }
+    
+    sub(subject){
+        
+        if( subject === "-" && this.currentOperand.includes('-')) {
+            this.chooseOperation("-")
+        }else if (this.currentOperand !== ""){
+            this.chooseOperation("-")
+        }
+        else{
+            this.appendNumber(subject)
+        }
         
     }
 
@@ -67,17 +80,13 @@ class Calculator{
                 return
         }
          
-        this.currentOperand = computation
+        //this.currentOperand = computation
+        this.currentOperand = computation.toString();
+        this.operation = undefined;
+        this.previousOperand = '';
       
     }
 
-    
-       afterEq(){
-         if (previousOperandColor == "false"){
-        previousOperandText.setAttribute("data-previous-operand",true);
-        
-       } 
-       }
   
     updateDisplay(){
         this.currentOperandText.innerText = this.currentOperand
@@ -95,8 +104,15 @@ const allClearButton = document.querySelector('[data-ac]')
 const previousOperandText = document.querySelector('[data-previous-operand]')
 const currentOperandText = document.querySelector('[data-current-operand]')
 const previousOperandColor = previousOperandText.getAttribute("data-previous-operand");
+const negative = document.querySelector('[data-sub]');
 
 const calculator = new Calculator(previousOperandText,currentOperandText)
+
+negative.addEventListener('click', ()=>{
+   
+    calculator.sub("-")
+    calculator.updateDisplay()
+})
 
 numberButtons.forEach(button =>{
     button.addEventListener('click', () => {
